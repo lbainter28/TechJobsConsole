@@ -60,7 +60,7 @@ namespace TechJobsConsole
                     Console.WriteLine("\nSearch term: ");
                     string searchTerm = Console.ReadLine();
 
-                    List<Dictionary<string, string>> searchResults;
+                    List<Dictionary<string, string>> searchResults = new List<Dictionary<string, string>>();
 
                     // Fetch results
                     if (columnChoice.Equals("all"))
@@ -134,7 +134,7 @@ namespace TechJobsConsole
                     {
                         Console.WriteLine(key + ": " + job[key]);
                     }
-                    Console.WriteLine("*****");
+                    Console.WriteLine("*****\n");
                 }
             }
         }

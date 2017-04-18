@@ -67,6 +67,7 @@ namespace TechJobsConsole
                 if (!values.Contains(aValue))
                 {
                     values.Add(aValue);
+                    values.Sort();
                 }
             }
             return values;
