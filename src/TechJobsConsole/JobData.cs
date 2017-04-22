@@ -10,7 +10,65 @@ namespace TechJobsConsole
     class JobData
     {
         static List<Dictionary<string, string>> AllJobs = new List<Dictionary<string, string>>();
+
+        // this would also work, because JobDictionary
+        // inherits from List<Dictionary<string, string>>
+        //
+        // JobDictionary AllJobs = new JobDictionary();
+
         static bool IsDataLoaded = false;
+
+        public static List<Dictionary<string, string>> FindAll()
+        {
+            LoadData();
+
+            List<Dictionary<string, string>> allJobsCopy = AllJobs.ToList();
+            allJobsCopy.Sort(new JobComparer("name"));
+            return allJobsCopy;
+        }
+
+        /*
+         * Returns a list of all values contained in a given column,
+         * without duplicates. 
+         */
+        public static List<string> FindAll(string column)
+        {
+            LoadData();
+
+            List<string> values = new List<string>();
+
+            foreach (Dictionary<string, string> job in AllJobs)
+            {
+                string aValue = job[column];
+
+                if (!values.Contains(aValue))
+                {
+                    values.Add(aValue);
+                }
+            }
+            values.Sort();
+            return values;
+        }
+
+        public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
+        {
+            // load data, if not already loaded
+            LoadData();
+
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+
+            foreach (Dictionary<string, string> row in AllJobs)
+            {
+                string aValue = row[column];
+
+                if (aValue.ToLower().Contains(value.ToLower()))
+                {
+                    jobs.Add(row);
+                }
+            }
+
+            return jobs;
+        }
 
         public static List<Dictionary<string, string>> FindByValue(string value)
         {
@@ -36,59 +94,26 @@ namespace TechJobsConsole
                 }
             }
 
-            return jobs;
-        }
-
-        public static List<Dictionary<string, string>> FindAll()
-        {
-            LoadData();
-
-            Dictionary<string, string>[] allJobs = new Dictionary<string, string>[AllJobs.Count];
-
-            AllJobs.CopyTo(allJobs);
-
-            return allJobs.ToList();
-        }
-
-        /*
-         * Returns a list of all values contained in a given column,
-         * without duplicates. 
-         */
-        public static List<string> FindAll(string column)
-        {
-            LoadData();
-
-            List<string> values = new List<string>();
-
+            /*
+            //
+            // alternative implementation using 'break' statement
+            //
             foreach (Dictionary<string, string> job in AllJobs)
             {
-                string aValue = job[column];
-
-                if (!values.Contains(aValue))
+                foreach (string key in job.Keys)
                 {
-                    values.Add(aValue);
-                    values.Sort();
+                    string fieldValue = job[fieldName];
+                    if (fieldValue.Contains(value))
+                    {
+                        jobs.Add(job);
+
+                        // terminates the closest foreach loop so
+                        // we go to the next job
+                        break;
+                    }
                 }
             }
-            return values;
-        }
-
-        public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
-        {
-            // load data, if not already loaded
-            LoadData();
-
-            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
-
-            foreach (Dictionary<string, string> row in AllJobs)
-            {
-                string aValue = row[column];
-
-                if (aValue.ToLower().Contains(value.ToLower()))
-                {
-                    jobs.Add(row);
-                }
-            }
+            */
 
             return jobs;
         }
